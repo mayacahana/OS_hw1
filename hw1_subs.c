@@ -55,10 +55,11 @@ int main(int argc, char **argv) {
 //    buffer[n] = '\0';
     struct stat st;
     fstat(fd, &st);
-    int size = st.st_size;
+    int size = st.st_size, i=0;
     buffer = (char *)malloc((size + 1) * sizeof(char));
     ssize_t len = read(fd,buffer,size);
     while (len < size) {
+        
         len += read(fd,buffer,size);
     }
     if (len < 0){
