@@ -18,6 +18,8 @@ int main(int argc, char **argv)
     {
         return 1;
     }
+    const char *str1 = argv[1];
+    const char *str2 = argv[2];
     const char *hw1dir = getenv("HW1DIR");
     const char *hw1tf = getenv("HW1TF");
     // in case of the env var not defined - return error
