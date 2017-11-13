@@ -22,6 +22,8 @@ int main(int argc, char **argv)
     const char *str2 = argv[2];
     const char *hw1dir = getenv("HW1DIR");
     const char *hw1tf = getenv("HW1TF");
+    struct stat st;
+    int size, i=0;
     // in case of the env var not defined - return error
     if (hw1dir == NULL || hw1tf == NULL) {
         return 1;
@@ -44,21 +46,8 @@ int main(int argc, char **argv)
         //free
         return 1;
     }
-    //
-    //    // reading the file
-    //    fseek(fd, 0, SEEK_END);
-    //    long file_size = ftell(fd);
-    //    fseek(fd, 0, SEEK_SET);
-    //    buffer = malloc(file_size * sizeof(char));
-    //    size_t n = 0;
-    //    while ((c = fgetc(fd)) != EOF) {
-    //        buffer[n++] = (char) c;
-    //    }
-    //
-    //    buffer[n] = '\0';
-    struct stat st;
     fstat(fd, &st);
-    int size = st.st_size, i = 0;
+    size = st.st_size;
     buffer = (char *)malloc((size + 1) * sizeof(char));
     ssize_t len = read(fd, buffer, size);
     while (len < size) {
