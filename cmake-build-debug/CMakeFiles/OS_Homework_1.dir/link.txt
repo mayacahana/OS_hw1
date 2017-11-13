@@ -1,1 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/cc -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/OS_Homework_1.dir/hw1_subs.c.o  -o OS_Homework_1 
