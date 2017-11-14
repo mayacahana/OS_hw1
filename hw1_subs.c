@@ -8,24 +8,26 @@
 #include <memory.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 int main(int argc, char **argv)
 {
     printf("Start");
     // check the command line arguments
     // assert two argument
-    if (argc != 3)
+    if (argc > 3)
     {
         perror("Error : Wrong number of argument");
         return 1;
     }
+    
     const char *str1 = argv[1];
     const char *str2 = argv[2];
     const char *hw1dir = getenv("HW1DIR");
     const char *hw1tf = getenv("HW1TF");
     struct stat st;
-    int size, i = 0, cnt = 0;
-    char *temp;
+    int size, i = 0;
+    char *buffer;
     // in case of the env var not defined - return error
     if (hw1dir == NULL || hw1tf == NULL)
     {
@@ -41,8 +43,6 @@ int main(int argc, char **argv)
     strcpy(&file_path[strlen(hw1dir) + 1], hw1tf);
     // open the input file for reading
     int fd = open(file_path, O_RDWR);
-    char *buffer;
-    char c;
     // error in opening the file
     if (fd < 0)
     {
@@ -74,29 +74,44 @@ int main(int argc, char **argv)
     }
     buffer[i] = '\0'; // string closer
     close(fd);
+    if (argc = 2){
+        printf("%.*s",size,buffer);
+        return 0;
+    }
     size_t len1 = strlen(str1);
     size_t len2 = strlen(str2);
-    const char *original_pattern;
-    char *location;
-    for (original_pattern = str1; location = strstr(buffer, str1); original_pattern = location + len1)
-    {
-        cnt++;
+    int *c = strstr(buffer,str1);
+    while (c != NULL){
+        printf("%.*s",(int)(c-(int)buffer),buffer);
+        buffer = c;
+        printf("%.*s",len2,str2);
+        buffer += len1;
+        c = strstr(buffer,str1);
     }
-    size_t const result_len = size + cnt * (str2 - str1);
-    char* result = (char *)malloc(sizeof(char) * (result_len + 1));
-    char* ptr = result;
-    if (result != NULL) {
-        for(original_pattern = str1; location = strstr(buffer,str1); original_pattern = location + len1){
-            size_t const skip_len = location - original_pattern;//len1 or original_pattern
-            //
-            strncpy(ptr,original_pattern,skip_len);
-            ptr+=skip_len;
-            strncpy(ptr,str2,len2);
-            ptr+=len2;
+    free(buffer);
+    free(file_path);
+    return 0;
+    // const char *original_pattern;
+    // char *location;
+    // for (original_pattern = str1; location = strstr(buffer, str1); original_pattern = (location + len1))
+    // {
+    //     cnt++;
+    // }
+    // size_t const result_len = size + cnt * (str2 - str1);
+    // char* result = (char *)malloc(sizeof(char) * (result_len + 1));
+    // char* ptr = result;
+    // if (result != NULL) {
+    //     for (original_pattern = str1; location = strstr(buffer,str1); original_pattern = (location + len1)){
+    //         size_t const skip_len = location - original_pattern;//len1 or original_pattern
+    //         //
+    //         strncpy(ptr,original_pattern,skip_len);
+    //         ptr+=skip_len;
+    //         strncpy(ptr,str2,len2);
+    //         ptr+=len2;
 
-        }
-    }
-    fwrite(result, 1, result_len, stdout);
+    //     }
+    // }
+    // fwrite(result, 1, result_len, stdout);
     // // now iterate over the buffer to find the substrings
     // char *insert_pont = &buffer[0];
     // size_t len1 = strlen(str1);
