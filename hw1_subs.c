@@ -76,13 +76,14 @@ int main(int argc, char **argv)
     close(fd);
     size_t len1 = strlen(str1);
     size_t len2 = strlen(str2);
-    char *original_pattern, location;
+    const char *original_pattern;
+    char *location;
     for (original_pattern = str1; location = strstr(buffer, str1); original_pattern = location + len1)
     {
         cnt++;
     }
     size_t const result_len = size + cnt * (str2 - str1);
-    const result = (char *)malloc(sizeof(char) * (result_len + 1));
+    char* result = (char *)malloc(sizeof(char) * (result_len + 1));
     char* ptr = result;
     if (result != NULL) {
         for(original_pattern = str1; location = strstr(buffer,str1); original_pattern = location + len1){
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
 
         }
     }
-    fwrite(result, 1, result_len, stdout)
+    fwrite(result, 1, result_len, stdout);
     // // now iterate over the buffer to find the substrings
     // char *insert_pont = &buffer[0];
     // size_t len1 = strlen(str1);
