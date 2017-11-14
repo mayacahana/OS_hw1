@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdint.h>
 
 int main(int argc, char **argv)
 {
@@ -28,6 +29,7 @@ int main(int argc, char **argv)
     struct stat st;
     int size, i = 0;
     char *buffer;
+    char *ptr_to_start;
     // in case of the env var not defined - return error
     if (hw1dir == NULL || hw1tf == NULL)
     {
@@ -47,20 +49,28 @@ int main(int argc, char **argv)
     if (fd < 0)
     {
         perror("Error :");
-        //free
+        close(fd);
+        free(file_path);
         return 1;
     }
     fstat(fd, &st);
     size = st.st_size;
     buffer = (char *)malloc((size + 1) * sizeof(char));
+    if (!buffer){
+        close(fd);
+        free(file_path);
+        return 1;
+    }
     //ssize_t len = read(fd, buffer, size);
     ssize_t tmp = 0;
-    while (i < size)
+    while (i < size && buffer+i)
     {
-        tmp = read(fd, buffer[i], size);
+        tmp = read(fd, buffer+i, size);
         if (tmp < 0)
         {
             close(fd);
+            free(buffer);
+            free(file_path);
             return 1;
         }
         i += tmp;
@@ -70,25 +80,31 @@ int main(int argc, char **argv)
     if (i != size)
     {
         perror("Error :");
+        close(fd);
+        free(buffer);
+        free(file_path);
         return 1;
     }
     buffer[i] = '\0'; // string closer
     close(fd);
-    if (argc = 2){
+    if (argc == 2) {
         printf("%.*s",size,buffer);
+        free(buffer);
+        free(file_path);
         return 0;
     }
     size_t len1 = strlen(str1);
     size_t len2 = strlen(str2);
-    int *c = strstr(buffer,str1);
+    ptr_to_start = buffer;
+    char *c = strstr(buffer,str1);
     while (c != NULL){
-        printf("%.*s",(int)(c-(int)buffer),buffer);
+        printf("%.*s",(int)((intptr_t)c-(intptr_t)buffer),buffer);
         buffer = c;
-        printf("%.*s",len2,str2);
+        printf("%.*s",(int)len2,str2);
         buffer += len1;
-        c = strstr(buffer,str1);
+        c = (char *)strstr(buffer,str1);
     }
-    free(buffer);
+    free(ptr_to_start);
     free(file_path);
     return 0;
     // const char *original_pattern;
