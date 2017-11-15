@@ -13,7 +13,7 @@
 
 int main(int argc, char **argv)
 {
-    printf("Start");
+    
     // check the command line arguments
     // assert two argument
     if (argc > 3)
@@ -61,7 +61,6 @@ int main(int argc, char **argv)
         free(file_path);
         return 1;
     }
-    //ssize_t len = read(fd, buffer, size);
     ssize_t tmp = 0;
     while (i < size && buffer+i)
     {
@@ -104,44 +103,9 @@ int main(int argc, char **argv)
         buffer += len1;
         c = (char *)strstr(buffer,str1);
     }
+    printf("%.*s",(int)(size-(intptr_t)c),buffer);
     free(ptr_to_start);
     free(file_path);
     return 0;
-    // const char *original_pattern;
-    // char *location;
-    // for (original_pattern = str1; location = strstr(buffer, str1); original_pattern = (location + len1))
-    // {
-    //     cnt++;
-    // }
-    // size_t const result_len = size + cnt * (str2 - str1);
-    // char* result = (char *)malloc(sizeof(char) * (result_len + 1));
-    // char* ptr = result;
-    // if (result != NULL) {
-    //     for (original_pattern = str1; location = strstr(buffer,str1); original_pattern = (location + len1)){
-    //         size_t const skip_len = location - original_pattern;//len1 or original_pattern
-    //         //
-    //         strncpy(ptr,original_pattern,skip_len);
-    //         ptr+=skip_len;
-    //         strncpy(ptr,str2,len2);
-    //         ptr+=len2;
-
-    //     }
-    // }
-    // fwrite(result, 1, result_len, stdout);
-    // // now iterate over the buffer to find the substrings
-    // char *insert_pont = &buffer[0];
-    // size_t len1 = strlen(str1);
-    // size_t len2 = strlen(str2);
-    // char *p;
-    // p = strstr(buffer[0], str1);
-    // // printing the start
-    // write (stdout, buffer, p);
-    // // iterating on all the occurences
-    // buffer = buffer+p;
-    // while (p && (p = strstr(buffer[i], str1)))
-    // {
-
-    // }
-    // // printing until the end
     
 }
